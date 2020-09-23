@@ -2,7 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Salario;
 use App\Models\Vacante;
+use App\Models\Categoria;
+use App\Models\Ubicacion;
+use App\Models\Experiencia;
 use Illuminate\Http\Request;
 
 class VacanteController extends Controller
@@ -15,13 +19,23 @@ class VacanteController extends Controller
 
     public function index()
     {
-        return 'Hola';
+        return view('vacantes.index');
     }
 
 
     public function create()
     {
-        //
+        // Consultas
+        $categorias   = Categoria::all();
+        $experiencias = Experiencia::all();
+        $ubicaciones  = Ubicacion::all();
+        $salarios     = Salario::all();
+
+        return view('vacantes.create')
+            ->with('categorias', $categorias)
+            ->with('experiencias', $experiencias)
+            ->with('ubicaciones', $ubicaciones)
+            ->with('salarios', $salarios);
     }
 
 
