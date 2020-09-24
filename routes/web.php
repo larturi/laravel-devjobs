@@ -19,6 +19,10 @@ Auth::routes(['verify' => true]);
 // Resource Vacantes
 Route::resource('vacantes', 'VacanteController');
 
+// Subir Imagenes y Eliminarlas
+Route::post('/vacantes/imagen', 'VacanteController@imagen')->name('vacantes.imagen');
+Route::post('/vacantes/borrarimagen', 'VacanteController@borrarimagen')->name('vacantes.borrarimagen');
+
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
 Route::get('/', function () {

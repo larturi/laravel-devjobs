@@ -13,8 +13,10 @@ require('laravel-mix-tailwind');
  */
 
 mix.js('resources/js/app.js', 'public/js')
-    .sass('resources/sass/app.scss', 'public/css')
-    .tailwind();
-
+   .autoload({
+        jquery: ['$', 'window.jQuery', 'jQuery']
+   })
+   .sass('resources/sass/app.scss', 'public/css')
+   .tailwind();
 
 mix.browserSync('http://devjobs.test');

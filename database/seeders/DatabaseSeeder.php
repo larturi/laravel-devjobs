@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
+use Database\Seeders\SkillSeeder;
 use Database\Seeders\SalarioSeeder;
 use Database\Seeders\UsuarioSeeder;
 use Database\Seeders\UbicacionSeeder;
@@ -23,5 +24,6 @@ class DatabaseSeeder extends Seeder
         $this->call(UsuarioSeeder::class);
         $this->call(UbicacionSeeder::class);
         $this->call(SalarioSeeder::class);
+        $this->call(SkillSeeder::class);
     }
 }
