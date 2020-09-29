@@ -12,7 +12,11 @@
 
     <h1 class="text-2xl text-center mt-10">Nueva Vacante</h1>
 
-    <form class="max-w-lg mx-auto my-10" action="">
+    <form class="max-w-lg mx-auto my-10"
+          action="{{ route('vacantes.store') }}"
+          method="POST">
+
+        @csrf
 
         {{-- Titulo --}}
         <div class="mb-3">
@@ -21,9 +25,16 @@
             </label>
             <input id="titulo"
                    type="text"
+                   placeholder="Titulo de la vacante"
                    class="p-3 bg-white rounded form-input w-full @error('titulo') is-invalid @enderror"
                    name="titulo" value="{{ old('titulo') }}"
+                   value="{{  old('titulo') }}"
                    autocomplete="titulo" autofocus>
+            @error('titulo')
+                <div class="bg-red-100 border-l-4 border-red-500 text-red-700 p-4 w-full mt-2 text-sm">
+                    <span class="block">{{ $message }}</span>
+                </div>
+            @enderror
         </div>
 
         {{-- Categoria --}}
@@ -41,11 +52,20 @@
                           <option disabled selected value="">- Selecciona -</option>
 
                           @foreach ($categorias as $categoria)
-                            <option value="{{ $categoria->id }}">
+                            <option
+                                {{ old('categoria') == $categoria->id ? 'selected' : '' }}
+                                value="{{ $categoria->id }}"
+                                >
                                 {{ $categoria->nombre }}
                             </option>
                           @endforeach
             </select>
+
+            @error('categoria')
+                <div class="bg-red-100 border-l-4 border-red-500 text-red-700 p-4 w-full mt-2 text-sm">
+                    <span class="block">{{ $message }}</span>
+                </div>
+            @enderror
         </div>
 
         {{-- Experiencia --}}
@@ -63,11 +83,19 @@
                           <option disabled selected value="">- Selecciona -</option>
 
                           @foreach ($experiencias as $experiencia)
-                            <option value="{{ $experiencia->id }}">
+                            <option
+                                {{ old('experiencia') == $experiencia->id ? 'selected' : '' }}
+                                value="{{ $experiencia->id }}">
                                 {{ $experiencia->nombre }}
                             </option>
                           @endforeach
             </select>
+
+            @error('experiencia')
+                <div class="bg-red-100 border-l-4 border-red-500 text-red-700 p-4 w-full mt-2 text-sm">
+                    <span class="block">{{ $message }}</span>
+                </div>
+            @enderror
         </div>
 
         {{-- Ubicacion --}}
@@ -85,11 +113,19 @@
                           <option disabled selected value="">- Selecciona -</option>
 
                           @foreach ($ubicaciones as $ubicacion)
-                            <option value="{{ $ubicacion->id }}">
+                            <option
+                               {{ old('ubicacion') == $ubicacion->id ? 'selected' : '' }}
+                                value="{{ $ubicacion->id }}">
                                 {{ $ubicacion->nombre }}
                             </option>
                           @endforeach
             </select>
+
+            @error('ubicacion')
+                <div class="bg-red-100 border-l-4 border-red-500 text-red-700 p-4 w-full mt-2 text-sm">
+                    <span class="block">{{ $message }}</span>
+                </div>
+            @enderror
         </div>
 
         {{-- Salario --}}
@@ -107,11 +143,19 @@
                           <option disabled selected value="">- Selecciona -</option>
 
                           @foreach ($salarios as $salario)
-                            <option value="{{ $salario->id }}">
+                            <option
+                               {{ old('salario') == $salario->id ? 'selected' : '' }}
+                                value="{{ $salario->id }}">
                                 {{ $salario->nombre }}
                             </option>
                           @endforeach
             </select>
+
+            @error('salario')
+                <div class="bg-red-100 border-l-4 border-red-500 text-red-700 p-4 w-full mt-2 text-sm">
+                    <span class="block">{{ $message }}</span>
+                </div>
+            @enderror
         </div>
 
         {{-- Editor --}}
@@ -122,37 +166,53 @@
 
             <div class="editable p-3 bg-gray-100 rounded form-input w-full text-gray-700"></div>
 
-            <input type="hidden" name="descripcion" name="descripcion">
+            <input type="hidden" name="descripcion" id="descripcion" value="{{ old('descripcion') }}">
+
+            @error('descripcion')
+                <div class="bg-red-100 border-l-4 border-red-500 text-red-700 p-4 w-full mt-2 text-sm">
+                    <span class="block">{{ $message }}</span>
+                </div>
+            @enderror
 
         </div>
 
         {{-- DropZone --}}
         <div class="mb-3">
-            <label for="descripcion" class="block text-gray-700 text-sm mb-2">
+            <label for="imagen" class="block text-gray-700 text-sm mb-2">
                 Imagen:
             </label>
 
             <div id="dropzoneDevJobs" class="dropzone rounded bg-gray-100"></div>
 
-            <input type="hidden" name="imagen" id="imagen">
+            <input type="hidden" name="imagen" id="imagen" value="{{ old('imagen') }}">
+
+            @error('imagen')
+                <div class="bg-red-100 border-l-4 border-red-500 text-red-700 p-4 w-full mt-2 text-sm">
+                    <span class="block">{{ $message }}</span>
+                </div>
+            @enderror
 
             <p id="errorUploadDropzone"></p>
 
         </div>
 
-        {{-- Habilidades --}}
+        {{-- Skills --}}
         <div class="mb-3">
             <label for="skills" class="block text-gray-700 text-sm mb-2">
                 Habilidades:
             </label>
 
-            {{-- @php
-                $skills = ['HTML5', 'CSS3', 'CSSGrid', 'Flexbox', 'JavaScript', 'jQuery', 'Node', 'Angular', 'VueJS', 'ReactJS', 'React Hooks', 'Redux', 'Apollo', 'GraphQL', 'TypeScript', 'PHP', 'Laravel', 'Symfony', 'Python', 'Django', 'ORM', 'Sequelize', 'Mongoose', 'SQL', 'MVC', 'SASS', 'WordPress', 'Express', 'Deno', 'React Native', 'Flutter', 'MobX', 'C#', 'Ruby on Rails']
-            @endphp --}}
-
-            <lista-skills :skills="{{ json_encode($skills) }}">
+            <lista-skills
+                :skills="{{ json_encode($skills) }}"
+                :oldskills="{{ json_encode(old('skills')) }}">
 
             </lista-skills>
+
+            @error('skills')
+                <div class="bg-red-100 border-l-4 border-red-500 text-red-700 p-4 w-full mt-2 text-sm">
+                    <span class="block">{{ $message }}</span>
+                </div>
+            @enderror
 
         </div>
 
@@ -182,7 +242,7 @@
                 toolbar : {
                     buttons: ['bold', 'italic', 'underline', 'quote', 'anchor',
                     'justifyLeft', 'justifyCenter', 'justifyRight', 'justifyFull',
-                    'orderList', 'unorderList', 'h2', 'h3'
+                    'orderedlist', 'unorderedlist', 'h2', 'h3'
                     ],
                     static: true,
                     sticky: true
@@ -192,10 +252,14 @@
                 }
             });
 
+            // Agrega en el input hidden lo que el usuario escribe en el editor
             editor.subscribe('editableInput', function(eventObj, editable) {
                 const contenido = editor.getContent();
                 document.querySelector('#descripcion').value = contenido;
             })
+
+            // Agrega en el editor lo que esta en el input hidden
+            editor.setContent(document.querySelector('#descripcion').value);
 
             dropzoneDevJobs = new Dropzone('#dropzoneDevJobs', {
                 url: '/vacantes/imagen',
@@ -206,6 +270,19 @@
                 acceptedFiles: '.png, .jpg, .jpeg, .gif, .bmp',
                 headers: {
                     'X-CSRF-TOKEN': document.querySelector('meta[name=csrf-token]').content
+                },
+                init: function() {
+                    if(document.querySelector('#imagen').value.trim()) {
+                        let imagenPublicada = {};
+                        imagenPublicada.size = 99;
+                        imagenPublicada.name = document.querySelector('#imagen').value;
+
+                        this.options.addedfile.call(this, imagenPublicada);
+                        this.options.thumbnail.call(this, imagenPublicada, `/storage/vacantes/${imagenPublicada.name}`);
+
+                        imagenPublicada.previewElement.classList.add('dz-success');
+                        imagenPublicada.previewElement.classList.add('dz-complete');
+                    }
                 },
                 success: function(file, response) {
                     document.querySelector('#errorUploadDropzone').textContent = '';
@@ -225,7 +302,7 @@
 
                     file.previewElement.parentNode.removeChild(file.previewElement);
                     params = {
-                        imagen: file.nombreservidor
+                        imagen: file.nombreservidor ?? document.querySelector('#imagen').value
                     };
 
                     axios.post('/vacantes/borrarimagen', params)

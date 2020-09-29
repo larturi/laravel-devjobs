@@ -16,12 +16,14 @@ class VacanteController extends Controller
     public function __construct()
     {
         // Validar que el usuario este autenticado y verificado
-        $this->middleware(['auth', 'verified']);
+        $this->middleware(['auth', 'verified'])->except(['show']);
     }
 
     public function index()
     {
-        return view('vacantes.index');
+        $vacantes = Vacante::where('user_id', auth()->user()->id)->paginate(10);
+
+        return view('vacantes.index', compact('vacantes'));
     }
 
 
@@ -45,13 +47,38 @@ class VacanteController extends Controller
 
     public function store(Request $request)
     {
-        //
+        // Validacion
+        $data = $request->validate([
+            'titulo'      => 'required|min:10',
+            'categoria'   => 'required',
+            'experiencia' => 'required',
+            'ubicacion'   => 'required',
+            'salario'     => 'required',
+            'descripcion' => 'required',
+            'imagen'      => 'required',
+            'skills'      => 'required|min:3',
+        ]);
+
+        // Almacenar en la base de datos
+        auth()->user()->vacantes()->create([
+            'titulo'         => $data['titulo'],
+            'imagen'         => $data['imagen'],
+            'descripcion'    => $data['descripcion'],
+            'skills'         => $data['skills'],
+            'categoria_id'   => $data['categoria'],
+            'experiencia_id' => $data['experiencia'],
+            'ubicacion_id'   => $data['ubicacion'],
+            'salario_id'     => $data['salario'],
+        ]);
+
+        return redirect()->action('VacanteController@index');
+
     }
 
 
     public function show(Vacante $vacante)
     {
-        //
+        return view('vacantes.show')->with('vacante', $vacante);
     }
 
 
