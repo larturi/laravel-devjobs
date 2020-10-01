@@ -13,12 +13,6 @@ use Illuminate\Support\Facades\File;
 
 class VacanteController extends Controller
 {
-    public function __construct()
-    {
-        // Validar que el usuario este autenticado y verificado
-        $this->middleware(['auth', 'verified'])->except(['show']);
-    }
-
     public function index()
     {
         $vacantes = Vacante::where('user_id', auth()->user()->id)->paginate(10);

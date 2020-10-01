@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Models\Salario;
+use App\Models\Candidato;
 use App\Models\Categoria;
 use App\Models\Ubicacion;
 use Illuminate\Database\Eloquent\Model;
@@ -44,6 +45,12 @@ class Vacante extends Model
      public function reclutador()
      {
          return $this->belongsTo(User::class, 'user_id');
+     }
+
+     // Relacion 1:n Vacante:Candidatos
+     public function candidatos()
+     {
+         return $this->hasMany(Candidato::class);
      }
 
 
