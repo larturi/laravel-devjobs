@@ -45,11 +45,10 @@
                   </div>
                 </td>
                 <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
-                  <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full
-                  {{ $vacante->activa ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800' }}
-                  ">
-                     {{ $vacante->activa ? 'Activa' : 'Inactiva' }}
-                  </span>
+                    <estado-vacante
+                        estado="{{ $vacante->activa }}"
+                        vacante-id="{{ $vacante->id }}"
+                    ></estado-vacante>
                 </td>
                 <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200 text-sm leading-5 text-gray-500">
                     <a
@@ -59,7 +58,11 @@
                 </td>
                 <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200 text-sm leading-5 font-medium">
                       <a href="#" class="text-teal-600 hover:text-teal-900 mr-5">Editar</a>
-                      <a href="#" class="text-red-600 hover:text-red-900  mr-5">Eliminar</a>
+
+                      <eliminar-vacante
+                        vacante-id="{{ $vacante->id }}"
+                      ></eliminar-vacante>
+
                       <a href="{{ route('vacantes.show', ['vacante' => $vacante->id]) }}" class="text-blue-600 hover:text-blue-900">Ver</a>
                 </td>
               </tr>

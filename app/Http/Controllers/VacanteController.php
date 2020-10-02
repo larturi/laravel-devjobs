@@ -90,7 +90,12 @@ class VacanteController extends Controller
 
     public function destroy(Vacante $vacante)
     {
-        //
+        // $this->authorize('delete', $vacante);
+
+        $tituloVacante = $vacante->titulo;
+
+        $vacante->delete();
+        return response()->json(["mensaje" => "Se elimino la vacante correctamente${tituloVacante}"]);
     }
 
     public function imagen(Request $request)
@@ -112,6 +117,13 @@ class VacanteController extends Controller
             }
         }
 
+    }
+
+    public function estado(Request $request, Vacante $vacante) {
+
+        $vacante->activa = $request->estado;
+        $vacante->save();
+        return response()->json(['respuesta' => 'Correcto']);
     }
 
 }
