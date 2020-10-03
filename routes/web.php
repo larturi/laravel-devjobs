@@ -40,7 +40,7 @@ Route::group(['middleware' => ['auth', 'verified']], function() {
 });
 
 // Página de inicio
-//Route::get('/', 'InicioController')->name('inicio');
+Route::get('/', 'InicioController')->name('inicio');
 
 // Categorias
 Route::get('/categorias/{categoria}', 'CategoriaController@show')->name('categorias.show');

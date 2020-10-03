@@ -78,19 +78,64 @@ class VacanteController extends Controller
 
     public function edit(Vacante $vacante)
     {
-        //
+        // Policy
+        $this->authorize('view', $vacante);
+
+        // Consultas
+        $categorias   = Categoria::all();
+        $experiencias = Experiencia::all();
+        $ubicaciones  = Ubicacion::all();
+        $salarios     = Salario::all();
+        $skills       = Skill::all();
+
+        return view('vacantes.edit')
+            ->with('categorias', $categorias)
+            ->with('experiencias', $experiencias)
+            ->with('ubicaciones', $ubicaciones)
+            ->with('salarios', $salarios)
+            ->with('skills', $skills)
+            ->with('vacante', $vacante);
+
     }
 
 
     public function update(Request $request, Vacante $vacante)
     {
-        //
+        // Policy
+        $this->authorize('update', $vacante);
+
+        // Validacion
+        $data = $request->validate([
+            'titulo'      => 'required|min:10',
+            'categoria'   => 'required',
+            'experiencia' => 'required',
+            'ubicacion'   => 'required',
+            'salario'     => 'required',
+            'descripcion' => 'required',
+            'imagen'      => 'required',
+            'skills'      => 'required|min:3',
+        ]);
+
+        // Update BD
+        $vacante->titulo = $data['titulo'];
+        $vacante->skills = $data['skills'];
+        $vacante->imagen = $data['imagen'];
+        $vacante->descripcion = $data['descripcion'];
+        $vacante->categoria_id = $data['categoria'];
+        $vacante->experiencia_id = $data['experiencia'];
+        $vacante->ubicacion_id = $data['ubicacion'];
+        $vacante->salario_id = $data['salario'];
+
+        $vacante->save();
+
+        // Redirect
+        return redirect()->action('VacanteController@index');
     }
 
 
     public function destroy(Vacante $vacante)
     {
-        // $this->authorize('delete', $vacante);
+        $this->authorize('delete', $vacante);
 
         $tituloVacante = $vacante->titulo;
 
