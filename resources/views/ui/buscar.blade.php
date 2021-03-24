@@ -31,7 +31,7 @@
         </select>
 
         @error('categoria')
-            <div class="bg-red-100 border-l-4 border-red-500 text-red-700 p-4 w-full mt-2 text-sm">
+            <div class="bg-red-100 border-l-4 border-red-500 text-red-700 p-4 w-64 mt-2 text-sm">
                 <span class="block">{{ $message }}</span>
             </div>
         @enderror
